@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        class ImageCard extends HTMLElement{
+            constructor(){
+                super();
+                var shadow = this.attachShadow( { mode: 'closed' } );
+                let templateElem = document.getElementById('imageCardTemplate');
+                let content = templateElem.content.cloneNode(true);
+                content.querySelector('img').setAttribute('src', './img/'+this.getAttribute('image'));
+                content.querySelector('img').setAttribute('alt', this.getAttribute('name'));
+                content.querySelector('.name').innerText = this.getAttribute('name');
+                content.querySelector('.date').innerText = this.getAttribute('date');
+                shadow.appendChild(content);
+            }
+        }
+        window.customElements.define('image-card',ImageCard);
+    </script>
+
+</head>
+<body>
+    <!-- template-area -->
+    <template id="imageCardTemplate"> 
+        <style>
+            div{
+                width:300px;
+                margin:auto;
+            }
+            img{
+                max-width: 300px;
+            }
+        </style>
+        <div class="name"></div>
+        <div class="date"></div>
+        <div class="image">
+            <img src="" alt="">
+        </div>
+    </template>
+    <!-- content-area -->
+</body>
+<script>
+    let imageArray = [
+        //name image date
+        ['伞','l20200627.png','2020年6月27日'],
+        ['海鸥','l20200627-2.png','2020年6月27日'],
+        ['少女','l20200705.png','2020年7月05日'],
+        ['龙猫','l20200705-2.png','2020年7月05日'],
+        ['小樱','l20200715.png','2020年7月15日'],
+        ['玛尼','l20200715-2.png','2020年7月15日'],
+        ['2233娘','l20200722.png','2020年7月22日'],
+        ['那乌西卡','l20200725.png','2020年7月25日'],
+        ['梅','l20200725-2.png','2020年7月25日'],
+        ['彩球','l20200725-3.png','2020年7月25日'],
+        ['琪琪-线稿','l20200726.jpg','2020年7月26日'],
+        ['琪琪-上色','l20200726-2.png','2020年7月26日'],
+        ['龙猫-向日葵','l20200726-3.png','2020年7月26日'],
+        ['阿莉埃蒂','l20200728.jpg','2020年7月28日'],
+        ['千与千寻','l20200729.jpg','2020年7月29日'],
+        ['风之谷','l20200802.jpg','2020年8月02日'],
+        ['云','l20200803.jpg','2020年8月03日'],
+        ['珊-线稿','l20200804.jpg','2020年8月04日'],
+        ['珊-上色','l20200804-2.jpg','2020年8月04日'],
+        ['珊-线稿','l20200805.jpg','2020年8月05日'],
+        ['梅-线稿','l20200806.jpg','2020年8月06日'],
+    ];
+    let html = '';
+    for(let i=0;i<imageArray.length;i++){
+        html += `<image-card 
+        name=${imageArray[i][0]} 
+        image=${imageArray[i][1]}
+        date=${imageArray[i][2]}
+        ></image-card>`
+    }
+    HTMLElement.prototype.appendHTML = function(html) {
+    let divTemp = document.createElement("div"), nodes = null
+        // 文档片段，一次性append，提高性能
+        , fragment = document.createDocumentFragment();
+    divTemp.innerHTML = html;
+    nodes = divTemp.childNodes;
+    for (let i=0, length=nodes.length; i<length; i+=1) {
+       fragment.appendChild(nodes[i].cloneNode(true));
+    }
+    this.appendChild(fragment);
+    // 据说下面这样子世界会更清净
+    nodes = null;
+    fragment = null;
+};
+    document.body.appendHTML(html);
+</script>
+</html>
